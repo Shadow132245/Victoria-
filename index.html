@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شكر وتقدير | Victoria™</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #060608;
+            --bg-card: rgba(18, 18, 23, 0.7);
+            --purple-deep: #1e0950;
+            --purple-neon: #7209b7;
+            --purple-light: #b5179e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-border: rgba(114, 9, 183, 0.15);
+            --neon-shadow: 0 0 15px rgba(114, 9, 183, 0.5);
+            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* حاوية الخلفية الجزيئية */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, var(--purple-deep) 0%, var(--bg-main) 70%);
+        }
+
+        header {
+            text-align: center;
+            padding: 6rem 2rem 3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .server-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text-main), var(--purple-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(114, 9, 183, 0.4);
+            margin-bottom: 1rem;
+            letter-spacing: 3px;
+            opacity: 0;
+            animation: textReveal 1s ease-out forwards;
+        }
+
+        .header-desc {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 2;
+            opacity: 0;
+            animation: textReveal 1s ease-out 0.3s forwards;
+        }
+
+        /* الحاوية الرئيسية للكروت */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* تصميم الكروت البريميوم */
+        .card {
+            background-color: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0; /* للظهور عند السكرول */
+            transform: translateY(50px) scale(0.9);
+            cursor: pointer;
+        }
+
+        /* ستايل عند ظهور الكرت (بواسطة JS) */
+        .card.show-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* الوميض العلوي للكرت */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at var(--shimmer-x, 50%) var(--shimmer-y, 50%), rgba(114, 9, 183, 0.15) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* شريط النيون العلوي عند الـ Hover */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--purple-neon), var(--purple-light), transparent);
+            transform: scaleX(0);
+            transition: var(--transition-smooth);
+            transform-origin: center;
+            opacity: 0.7;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+            border-color: rgba(114, 9, 183, 0.3);
+            box-shadow: 0 20px 50px rgba(114, 9, 183, 0.2);
+            background-color: rgba(18, 18, 23, 0.9);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .role-badge {
+            display: inline-block;
+            background: rgba(114, 9, 183, 0.1);
+            color: var(--purple-light);
+            padding: 0.5rem 1.4rem;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin: 0 auto 2rem;
+            border: 1px solid rgba(114, 9, 183, 0.2);
+            width: fit-content;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .member-name {
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            transition: var(--transition-smooth);
+            position: relative;
+            z-index: 2;
+        }
+
+        .card:hover .member-name {
+            color: #fff;
+            text-shadow: var(--neon-shadow);
+        }
+
+        .member-desc {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* القسم الختامي البريميوم */
+        .special-thanks {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(to top, #111, transparent);
+            width: 100%;
+            margin-top: auto;
+            border-top: 1px solid rgba(114, 9, 183, 0.15);
+            position: relative;
+            z-index: 10;
+        }
+
+        .special-thanks h3 {
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: textReveal 1s ease-out 0.6s forwards;
+        }
+
+        .special-thanks p {
+            color: var(--text-muted);
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 2.2;
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: textReveal 1s ease-out 0.9s forwards;
+        }
+
+        /* تأثيرات الظهور */
+        @keyframes textReveal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* تصميم للموبايل والشاشات الصغيرة */
+        @media (max-width: 1024px) {
+            .container { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            .server-title { font-size: 3rem; }
+            .header-desc { font-size: 1.1rem; }
+            .container { padding: 1.5rem; gap: 1.5rem; }
+            .card { padding: 2.5rem 1.5rem; }
+            .member-name { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <header>
+        <h1 class="server-title">Victoria™</h1>
+        <p class="header-desc">
+            رسالة شكر وعرفان، نُقشت بحروف من نور، لكل قلبٍ وعقلٍ ساهم في بناء هذا الصرح الشامخ. بكم نرتقي، وبجهودكم نُخلّد.
+        </p>
+    </header>
+
+    <div class="container" id="members-container">
+        <div class="card">
+            <div class="role-badge">Server Owner 👑</div>
+            <h2 class="member-name">Marvin</h2>
+            <p class="member-desc">مؤسس الكيان وصاحب الرؤية الأولى، شكراً لقيادتك الحكيمة وجهودك الجبارة لتطوير السيرفر.</p>
+        </div>
+
+        <div class="card">
+            <div class="role-badge">1st Co-Owner & Investor 💎</div>
+            <h2 class="member-name">Soul GoodMan</h2>
+            <p class="member-desc">المستثمر والداعم الأول، شكراً لإيمانك اللامحدود بمشروعنا ودعمك السخي الذي لا يتوقف.</p>
+        </div>
+
+        <div class="card">
+            <div class="role-badge">2nd Co-Owner ⚡</div>
+            <h2 class="member-name">Molotof</h2>
+            <p class="member-desc">الكو اونر الثاني، ركيزة أساسية من ركائز النجاح؛ كلمات الشكر تعجز عن وصف عظيم عطائك.</p>
+        </div>
+
+        <div class="card">
+            <div class="role-badge">Developer & Tech Lead 💻</div>
+            <h2 class="member-name">#EuroMoscow.</h2>
+            <p class="member-desc">مطور السيرفر وصانع الموقع، العقل المدبر وراء الكواليس الذي يحول الخيال إلى واقع رقمي مبهر.</p>
+        </div>
+
+        <div class="card">
+            <div class="role-badge">Distinguished Admin ⭐</div>
+            <h2 class="member-name">omar scorpion</h2>
+            <p class="member-desc">إداري مميز قدم الغالي والنفيس، مثال يُحتذى به في التفاني والعطاء دون مقابل.</p>
+        </div>
+
+        <div class="card">
+            <div class="role-badge">Girls Supervisor 🌸</div>
+            <h2 class="member-name">Maryem</h2>
+            <p class="member-desc">مسؤولة القسم النسائي، شكراً لجهودك الرائعة في تنظيم السيرفر وحفظ خصوصية الجميع.</p>
+        </div>
+
+        <div class="card">
+            <div class="role-badge">Core Member ✨</div>
+            <h2 class="member-name">Samo</h2>
+            <p class="member-desc">من أبرز الوجوه التي تضع بصمتها في السيرفر، حضورك ومساعدتك الدائمة محل تقدير وفخر.</p>
+        </div>
+    </div>
+
+    <footer class="special-thanks">
+        <h3>ولكل من لم يُذكر اسمه في القائمة... 💜</h3>
+        <p>
+            تلك كانت أبرز الأسماء، ولكن الشكر يمتد ليشمل كل من وضع لبنة في هذا البناء، حتى ولو بكلمة طيبة، فكرة بسيطة، أو ابتسامة رقمية. القائمة تطول، والتقدير لكل فرد في عائلة <strong>Victoria™</strong> لا ينتهي. أنتم المحرك الحقيقي، وبكم نستمر.
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // تكوين مكتبة Particles.js لخلفية الجزيئات التفاعلية
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#7209b7" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#7209b7", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.5 } }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+
+        // تأثيرات الكروت المتقدمة (Tilt & Shimmer)
+        const cards = document.querySelectorAll('.card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // تحديث موقع الإضاءة الداخلية تتبع الماوس
+                card.style.setProperty('--shimmer-x', `${x}px`);
+                card.style.setProperty('--shimmer-y', `${y}px`);
+                
+                // تأثير الميلان ثلاثي الأبعاد (Tilt Effect)
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const tiltX = (centerY - y) / 15; // حساسية الميلان الرأسي
+                const tiltY = (x - centerX) / 15; // حساسية الميلان الأفقي
+                
+                card.style.setProperty('--tilt-x', `${tiltX}deg`);
+                card.style.setProperty('--tilt-y', `${tiltY}deg`);
+            });
+            
+            // إعادة تعيين التأثيرات عند خروج الماوس
+            card.addEventListener('mouseleave', () => {
+                card.style.setProperty('--tilt-x', `0deg`);
+                card.style.setProperty('--tilt-y', `0deg`);
+                card.style.setProperty('--shimmer-x', `50%`);
+                card.style.setProperty('--shimmer-y', `50%`);
+            });
+        });
+
+        // تأثير ظهور الكروت عند السكرول (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // تأخير خفيف متدرج لكل كرت
+                    setTimeout(() => {
+                        entry.target.classList.add('show-card');
+                    }, index * 100); 
+                    observer.unobserve(entry.target); // إظهار الكرت مرة واحدة فقط
+                }
+            });
+        }, { threshold: 0.2 }); // الكرت يظهر عند ظهور 20% منه في الشاشة
+
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
