@@ -10,7 +10,7 @@
     
     <style>
         /* ----------------------------------
-           1. الألوان والمتغيرات الأساسية
+           1. الألوان والمتغيرات
         ----------------------------------- */
         :root {
             --bg-main: #060608;
@@ -52,11 +52,58 @@
         }
 
         /* ----------------------------------
-           2. الهيدر والعناوين
+           2. شريط إحصائيات الإدارة (جديد)
+        ----------------------------------- */
+        #adminDashboard {
+            display: none; /* مخفي للزوار */
+            background: rgba(114, 9, 183, 0.1);
+            border-bottom: 1px solid var(--purple-neon);
+            padding: 1rem 2rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 20;
+        }
+
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            min-width: 150px;
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+        .stat-value.purple { color: var(--purple-light); }
+        .stat-value.orange { color: #ffa500; }
+        .stat-value.red { color: var(--danger-color); }
+
+        /* ----------------------------------
+           3. الهيدر والعناوين
         ----------------------------------- */
         header {
             text-align: center;
-            padding: 5rem 2rem 2rem;
+            padding: 4rem 2rem 2rem;
             position: relative;
             z-index: 10;
         }
@@ -97,7 +144,7 @@
         }
 
         /* ----------------------------------
-           3. كروت الإدارة 
+           4. كروت الإدارة 
         ----------------------------------- */
         .fame-grid {
             display: grid;
@@ -147,7 +194,7 @@
         }
 
         /* ----------------------------------
-           4. نموذج الإضافة 
+           5. الفورم 
         ----------------------------------- */
         .contribution-form-container {
             max-width: 700px;
@@ -297,10 +344,72 @@
         }
 
         /* ----------------------------------
-           5. حائط المجتمع (Community Grid)
+           6. شريط البحث والفلترة (جديد)
         ----------------------------------- */
-        
-        /* زر إظهار قائمة المتصدرين */
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(18, 18, 23, 0.5);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .search-box {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.8rem 1rem 0.8rem 2.5rem; /* مسافة للأيقونة */
+            border-radius: 10px;
+            color: #fff;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--purple-light);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(114, 9, 183, 0.2);
+            border-color: var(--purple-neon);
+            color: #fff;
+        }
+
+        /* ----------------------------------
+           7. حائط المجتمع (الكروت)
+        ----------------------------------- */
         .leaderboard-btn-container {
             text-align: center;
             margin-bottom: 2rem;
@@ -379,7 +488,20 @@
             white-space: nowrap;
         }
 
-        /* صورة المساهمة (الجديدة) */
+        .ai-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .post-content {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
         .post-image {
             width: 100%;
             height: 200px;
@@ -387,6 +509,43 @@
             border-radius: 10px;
             margin-top: 1rem;
             border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* تنسيق رد الذكاء الاصطناعي (جديد) */
+        .ai-reply-box {
+            margin-top: 15px;
+            background: rgba(35, 165, 89, 0.1);
+            border-right: 3px solid var(--success-color);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+        }
+        
+        .ai-reply-box i {
+            color: var(--success-color);
+            margin-left: 5px;
+        }
+
+        /* أوسمة التفاعل (جديد) */
+        .fire-badge {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: linear-gradient(45deg, #ff4500, #ff8c00);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
         }
 
         .card-actions {
@@ -449,7 +608,7 @@
         }
 
         /* ----------------------------------
-           6. نافذة المتصدرين (Modal)
+           8. نافذة المتصدرين
         ----------------------------------- */
         .modal-overlay {
             position: fixed;
@@ -549,6 +708,23 @@
 
     <div id="particles-js"></div>
 
+    <div id="adminDashboard">
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-title">إجمالي المساهمات المقبولة</div>
+                <div class="stat-value purple" id="statApproved">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">قيد المراجعة</div>
+                <div class="stat-value orange" id="statPending">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">إجمالي القلوب بالموقع</div>
+                <div class="stat-value red" id="statHearts">-</div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="leaderboardModal">
         <div class="modal-content">
             <i class="fas fa-times close-modal" onclick="closeLeaderboard()"></i>
@@ -568,41 +744,13 @@
     <div class="container">
         <h2 class="section-title">قادة ومؤسسي الكيان</h2>
         <div class="fame-grid">
-            <div class="fame-card">
-                <div class="role-badge">Server Owner 👑</div>
-                <h2 class="member-name">Marvin</h2>
-                <p class="member-desc">مؤسس الكيان وصاحب الرؤية الأولى.</p>
-            </div>
-            <div class="fame-card">
-                <div class="role-badge">1st Co-Owner & Investor 💎</div>
-                <h2 class="member-name">Soul GoodMan</h2>
-                <p class="member-desc">المستثمر والداعم الأول للسيرفر.</p>
-            </div>
-            <div class="fame-card">
-                <div class="role-badge">2nd Co-Owner ⚡</div>
-                <h2 class="member-name">Molotof</h2>
-                <p class="member-desc">ركيزة أساسية من ركائز النجاح.</p>
-            </div>
-            <div class="fame-card">
-                <div class="role-badge">Developer 💻</div>
-                <h2 class="member-name">#EuroMoscow.</h2>
-                <p class="member-desc">مطور السيرفر وصانع هذا الموقع.</p>
-            </div>
-            <div class="fame-card">
-                <div class="role-badge">Admin ⭐</div>
-                <h2 class="member-name">omar scorpion</h2>
-                <p class="member-desc">إداري مميز قدم الكثير دون مقابل.</p>
-            </div>
-            <div class="fame-card">
-                <div class="role-badge">Supervisor 🌸</div>
-                <h2 class="member-name">Maryem</h2>
-                <p class="member-desc">مسؤولة القسم النسائي وتنظيمه.</p>
-            </div>
-            <div class="fame-card">
-                <div class="role-badge">Core Member ✨</div>
-                <h2 class="member-name">Samo</h2>
-                <p class="member-desc">حضور ومساعدة دائمة محل تقدير.</p>
-            </div>
+            <div class="fame-card"><div class="role-badge">Server Owner 👑</div><h2 class="member-name">Marvin</h2><p class="member-desc">مؤسس الكيان وصاحب الرؤية الأولى.</p></div>
+            <div class="fame-card"><div class="role-badge">1st Co-Owner & Investor 💎</div><h2 class="member-name">Soul GoodMan</h2><p class="member-desc">المستثمر والداعم الأول للسيرفر.</p></div>
+            <div class="fame-card"><div class="role-badge">2nd Co-Owner ⚡</div><h2 class="member-name">Molotof</h2><p class="member-desc">ركيزة أساسية من ركائز النجاح.</p></div>
+            <div class="fame-card"><div class="role-badge">Developer 💻</div><h2 class="member-name">#EuroMoscow.</h2><p class="member-desc">مطور السيرفر وصانع هذا الموقع.</p></div>
+            <div class="fame-card"><div class="role-badge">Admin ⭐</div><h2 class="member-name">omar scorpion</h2><p class="member-desc">إداري مميز قدم الكثير دون مقابل.</p></div>
+            <div class="fame-card"><div class="role-badge">Supervisor 🌸</div><h2 class="member-name">Maryem</h2><p class="member-desc">مسؤولة القسم النسائي وتنظيمه.</p></div>
+            <div class="fame-card"><div class="role-badge">Core Member ✨</div><h2 class="member-name">Samo</h2><p class="member-desc">حضور ومساعدة دائمة محل تقدير.</p></div>
         </div>
 
         <h2 class="section-title">حائط مساهمات المجتمع</h2>
@@ -629,13 +777,13 @@
                 </div>
                 
                 <div class="input-group" id="groupText">
-                    <label>اشرح مساهمتك باختصار (يتم الفحص بالذكاء الاصطناعي):</label>
+                    <label>اشرح مساهمتك باختصار (يتم التلخيص والفحص بالذكاء الاصطناعي):</label>
                     <textarea class="form-control" id="contribText" placeholder="مثال: قمت بتصميم البنرات الخاصة بالرومات الجديدة..."></textarea>
                     <div id="typingIndicator">جاري الكتابة... ✍️</div>
                 </div>
 
                 <div class="input-group" id="groupImage">
-                    <label>رابط صورة لإنجازك (اختياري - من رفع موقع مثل Imgur):</label>
+                    <label>رابط صورة لإنجازك (اختياري - من موقع Imgur أو ديسكورد):</label>
                     <input type="text" class="form-control" id="contribImage" placeholder="https://i.imgur.com/example.png">
                 </div>
                 
@@ -651,6 +799,20 @@
             </button>
         </div>
 
+        <div class="filter-section">
+            <div class="filter-buttons" id="filterButtons">
+                <button class="filter-btn active" onclick="setFilter('الكل')">الكل</button>
+                <button class="filter-btn" onclick="setFilter('برمجة وبوتات')">💻 برمجة</button>
+                <button class="filter-btn" onclick="setFilter('تصميم وجرافيك')">🎨 تصميم</button>
+                <button class="filter-btn" onclick="setFilter('إدارة وتنظيم')">🛡️ إدارة</button>
+                <button class="filter-btn" onclick="setFilter('أفكار واقتراحات')">💡 أفكار</button>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="ابحث في المساهمات..." onkeyup="handleSearch()">
+            </div>
+        </div>
+
         <div class="community-grid" id="communityGrid"></div>
     </div>
 
@@ -661,40 +823,17 @@
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // إعدادات الخلفية
-        particlesJS('particles-js', { 
-            "particles": { 
-                "number": { "value": 60 }, 
-                "color": { "value": "#7209b7" }, 
-                "opacity": { "value": 0.3 }, 
-                "size": { "value": 3 }, 
-                "line_linked": { 
-                    "enable": true, 
-                    "distance": 150, 
-                    "color": "#7209b7", 
-                    "opacity": 0.2 
-                }, 
-                "move": { 
-                    "enable": true, 
-                    "speed": 1.5 
-                } 
-            } 
-        });
+        particlesJS('particles-js', { "particles": { "number": { "value": 60 }, "color": { "value": "#7209b7" }, "opacity": { "value": 0.3 }, "size": { "value": 3 }, "line_linked": { "enable": true, "distance": 150, "color": "#7209b7", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } });
 
-        // ==========================================
-        // إعدادات الـ API و الديسكورد
-        // ==========================================
         const API_BASE_URL = '/api';
-        
-        // ⚠️ ضع هنا الـ Client ID الخاص بتطبيق ديسكورد
         const CLIENT_ID = '1493579939704868944'; 
-        
-        // ⚠️ ضع هنا رابط موقعك على Vercel
         const REDIRECT_URI = encodeURIComponent(window.location.origin); 
         
         let user = null;
+        let currentFilter = 'الكل';
+        let currentSearch = '';
+        let searchTimeout = null;
 
-        // 1. تأثير مؤشر الكتابة
         document.getElementById('contribText').addEventListener('input', function() {
             const indicator = document.getElementById('typingIndicator');
             if (this.value.trim().length > 0) {
@@ -708,7 +847,6 @@
             }
         });
 
-        // 2. زرار تسجيل الدخول والخروج
         document.getElementById('loginBtn').onclick = () => {
             if (!user) {
                 window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=identify`;
@@ -720,7 +858,6 @@
             window.location.href = window.location.pathname; 
         }
 
-        // 3. تحديث واجهة المستخدم
         function updateUI() {
             if (user) {
                 const btn = document.getElementById('loginBtn');
@@ -731,73 +868,56 @@
                 btn.style.cursor = 'default';
                 
                 document.getElementById('logoutBtn').style.display = 'block';
-                
-                document.querySelectorAll('.input-group').forEach(el => {
-                    el.classList.add('active');
-                });
+                document.querySelectorAll('.input-group').forEach(el => el.classList.add('active'));
+
+                // إظهار لوحة إحصائيات الإدارة إذا كان المستخدم إداري
+                if(user.is_admin) {
+                    document.getElementById('adminDashboard').style.display = 'block';
+                    loadAdminStats();
+                }
             }
         }
 
-        // 4. تهيئة الموقع 
         async function init() {
             const code = new URLSearchParams(window.location.search).get('code');
-            
             if (code) {
                 const btn = document.getElementById('loginBtn');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق من حسابك ورتبتك...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
                 try {
                     const res = await fetch(`${API_BASE_URL}/auth/discord`, {
-                        method: 'POST', 
-                        headers: {'Content-Type': 'application/json'},
+                        method: 'POST', headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({ code })
                     });
                     const data = await res.json();
-                    
                     if (data.status === 'success') {
                         user = data.user;
                         localStorage.setItem('victoria_user_data', JSON.stringify(user));
                         window.history.replaceState({}, document.title, window.location.pathname);
-                    } else {
-                        alert(data.error);
-                    }
-                } catch (e) { 
-                    console.error("Discord Auth failed"); 
-                }
+                    } else { alert(data.error); }
+                } catch (e) { console.error("Auth failed"); }
             }
 
             const saved = localStorage.getItem('victoria_user_data');
-            if (saved && !user) {
-                user = JSON.parse(saved);
-            }
+            if (saved && !user) user = JSON.parse(saved);
 
             updateUI();
             loadPosts(); 
         }
 
-        // 5. إرسال المساهمة (محدثة لدعم الصور)
         async function sendContribution() {
             const text = document.getElementById('contribText').value;
             const type = document.getElementById('contribType').value;
             const imageUrl = document.getElementById('contribImage').value.trim();
-            
             if (!text.trim() || !user) return;
 
             const btn = document.getElementById('submitBtn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الفحص والنشر...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التلخيص والنشر بالذكاء الاصطناعي...';
             btn.disabled = true;
 
             try {
                 const res = await fetch(`${API_BASE_URL}/add_contribution`, {
-                    method: 'POST', 
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ 
-                        discord_id: user.id, 
-                        username: user.username, 
-                        avatar: user.avatar, 
-                        type: type, 
-                        content: text,
-                        image_url: imageUrl
-                    })
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ discord_id: user.id, username: user.username, avatar: user.avatar, type: type, content: text, image_url: imageUrl })
                 });
                 const data = await res.json();
                 
@@ -807,54 +927,46 @@
                     document.getElementById('contribImage').value = '';
                     document.getElementById('typingIndicator').style.display = 'none';
                     document.getElementById('contribText').style.boxShadow = 'none';
-                    loadPosts(); 
-                } else { 
-                    alert('⚠️ ' + data.message); 
-                }
-            } catch (e) { 
-                alert('خطأ في الاتصال بالسيرفر. حاول مجدداً.'); 
-            }
+                    loadPosts();
+                    if(user.is_admin) loadAdminStats(); 
+                } else { alert('⚠️ ' + data.message); }
+            } catch (e) { alert('خطأ في الاتصال بالسيرفر.'); }
             
-            btn.innerHTML = 'نشر المساهمة'; 
-            btn.disabled = false;
+            btn.innerHTML = 'نشر المساهمة'; btn.disabled = false;
         }
 
-        // 6. الإعجاب (Upvote)
-        async function likePost(btnElement, postId) {
-            btnElement.style.color = 'var(--danger-color)';
-            btnElement.querySelector('i').classList.replace('far', 'fas');
-            let countSpan = btnElement.querySelector('span');
-            countSpan.innerText = parseInt(countSpan.innerText) + 1;
-            btnElement.onclick = null; 
-            
-            fetch(`${API_BASE_URL}/upvote/${postId}`, { method: 'POST' });
+        // --- الفلترة والبحث ---
+        function setFilter(type) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            loadPosts();
         }
 
-        // 7. أوامر لوحة تحكم الإدارة
-        async function adminAction(action, postId) {
-            if(!confirm('هل أنت متأكد من هذا الإجراء؟')) return;
-            
-            await fetch(`${API_BASE_URL}/${action}/${postId}`, { 
-                method: action === 'delete' ? 'DELETE' : 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ admin_id: user.id })
-            });
-            
-            loadPosts(); 
+        function handleSearch() {
+            clearTimeout(searchTimeout);
+            currentSearch = document.getElementById('searchInput').value.trim();
+            // استخدام Debounce عشان مانعملش ضغط على السيرفر مع كل حرف بيتكتب
+            searchTimeout = setTimeout(() => {
+                loadPosts();
+            }, 500);
         }
 
-        // 8. جلب وعرض المساهمات (محدثة للصور)
         async function loadPosts() {
             const grid = document.getElementById('communityGrid');
-            grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> جاري تحميل المساهمات...</p>';
+            grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...</p>';
             
             try {
-                const fetchUrl = user ? `${API_BASE_URL}/get_contributions?discord_id=${user.id}` : `${API_BASE_URL}/get_contributions`;
+                let fetchUrl = `${API_BASE_URL}/get_contributions?`;
+                if(user) fetchUrl += `discord_id=${user.id}&`;
+                if(currentFilter !== 'الكل') fetchUrl += `type=${encodeURIComponent(currentFilter)}&`;
+                if(currentSearch) fetchUrl += `search=${encodeURIComponent(currentSearch)}&`;
+
                 const res = await fetch(fetchUrl);
                 const posts = await res.json();
                 
                 if(posts.length === 0) {
-                    grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--text-muted);">كن أول من يشارك إنجازه في السيرفر!</p>';
+                    grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--text-muted);">لا توجد مساهمات مطابقة للبحث.</p>';
                     return;
                 }
                 
@@ -862,23 +974,28 @@
                 posts.forEach(p => {
                     const adminBadge = p.is_admin ? '<i class="fas fa-check-circle verified-badge" title="عضو إدارة"></i>' : '';
                     const roleNameTag = p.role_name ? `<span class="role-name-tag">${p.role_name}</span>` : '';
-                    
                     const pendingStyle = p.status === 'pending' ? 'pending' : '';
                     const pendingLabel = p.status === 'pending' ? '<span style="color:var(--danger-color); font-size:0.8rem; font-weight:bold; margin-right: 10px;">(قيد المراجعة)</span>' : '';
                     
+                    const aiTitleHtml = p.ai_title ? `<span class="ai-title">✨ ${p.ai_title}</span>` : '';
+                    const aiReplyHtml = p.ai_reply ? `<div class="ai-reply-box"><i class="fas fa-robot"></i> <strong>رد الإدارة:</strong> ${p.ai_reply}</div>` : '';
                     const imageHtml = p.image_url ? `<img src="${p.image_url}" class="post-image" alt="إنجاز العضو">` : '';
+
+                    // أوسمة التفاعل (Badges)
+                    const fireBadge = p.upvotes >= 5 ? '<div class="fire-badge"><i class="fas fa-fire"></i> مساهمة مميزة</div>' : '';
 
                     let adminButtons = '';
                     if (user && user.is_admin) {
                         adminButtons = `<div class="admin-actions">`;
                         if (p.status === 'pending') {
-                            adminButtons += `<button class="btn-approve" onclick="adminAction('approve', '${p.id}')">موافقة ✅</button>`;
+                            adminButtons += `<button class="btn-approve" onclick="adminAction('approve', '${p.id}', this)"><i class="fas fa-check"></i> موافقة</button>`;
                         }
-                        adminButtons += `<button class="btn-delete" onclick="adminAction('delete', '${p.id}')">حذف ❌</button></div>`;
+                        adminButtons += `<button class="btn-delete" onclick="adminAction('delete', '${p.id}', this)"><i class="fas fa-trash"></i> حذف</button></div>`;
                     }
 
                     grid.innerHTML += `
                         <div class="community-card ${pendingStyle}">
+                            ${fireBadge}
                             <div style="display:flex; align-items:center; gap:15px; margin-bottom:1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
                                 <img src="${p.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" class="user-avatar">
                                 <div>
@@ -888,9 +1005,11 @@
                                     <span style="font-size:12px; color:var(--purple-light); background: rgba(114, 9, 183, 0.15); padding: 3px 8px; border-radius: 10px; display: inline-block; margin-top: 5px;">${p.type}</span>
                                 </div>
                             </div>
-                            <p style="color:var(--text-muted); font-size:0.95rem; line-height: 1.6;">${p.content}</p>
                             
+                            ${aiTitleHtml}
+                            <p class="post-content">${p.content}</p>
                             ${imageHtml}
+                            ${aiReplyHtml}
 
                             <div class="card-actions">
                                 <button class="upvote-btn" onclick="likePost(this, '${p.id}')">
@@ -900,12 +1019,53 @@
                             </div>
                         </div>`;
                 });
-            } catch (e) { 
-                grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--danger-color);">فشل تحميل البيانات من السيرفر.</p>'; 
-            }
+            } catch (e) { grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--danger-color);">فشل تحميل البيانات.</p>'; }
         }
 
-        // 9. دوال نافذة المتصدرين (Leaderboard)
+        async function likePost(btnElement, postId) {
+            btnElement.style.color = 'var(--danger-color)';
+            btnElement.querySelector('i').classList.replace('far', 'fas');
+            let countSpan = btnElement.querySelector('span');
+            countSpan.innerText = parseInt(countSpan.innerText) + 1;
+            btnElement.onclick = null; 
+            
+            await fetch(`${API_BASE_URL}/upvote/${postId}`, { method: 'POST' });
+            if(user && user.is_admin) loadAdminStats();
+        }
+
+        async function adminAction(action, postId, btnElement) {
+            if(!confirm('هل أنت متأكد من هذا الإجراء؟')) return;
+            
+            // تغيير شكل الزر ليعرف الإداري أن الـ AI بيألف الرد
+            if(action === 'approve') {
+                btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأليف الرد...';
+                btnElement.disabled = true;
+            }
+
+            await fetch(`${API_BASE_URL}/${action}/${postId}`, { 
+                method: action === 'delete' ? 'DELETE' : 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ admin_id: user.id })
+            });
+            
+            loadPosts(); 
+            loadAdminStats();
+        }
+
+        // جلب الإحصائيات للإدارة
+        async function loadAdminStats() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/admin_stats?admin_id=${user.id}`);
+                const stats = await res.json();
+                if(!stats.error) {
+                    document.getElementById('statApproved').innerText = stats.total_approved;
+                    document.getElementById('statPending').innerText = stats.total_pending;
+                    document.getElementById('statHearts').innerText = stats.total_hearts;
+                }
+            } catch(e) {}
+        }
+
+        // دوال نافذة المتصدرين 
         function openLeaderboard() {
             document.getElementById('leaderboardModal').style.display = 'flex';
             fetchLeaderboard();
@@ -930,16 +1090,15 @@
                 
                 listDiv.innerHTML = '';
                 leaders.forEach((leader, index) => {
-                    // تحديد شكل الرقم (الأول ذهبي، الثاني فضي..)
                     let rankColor = 'var(--purple-light)';
-                    if(index === 0) rankColor = '#ffd700';
-                    if(index === 1) rankColor = '#c0c0c0';
-                    if(index === 2) rankColor = '#cd7f32';
+                    if(index === 0) rankColor = '#ffd700'; // ذهبي للأول
+                    if(index === 1) rankColor = '#c0c0c0'; // فضي للثاني
+                    if(index === 2) rankColor = '#cd7f32'; // برونزي للثالث
 
                     listDiv.innerHTML += `
                         <div class="leaderboard-item">
                             <div class="rank-number" style="color: ${rankColor};">${index + 1}</div>
-                            <img src="${leader.avatar}" style="width: 40px; height: 40px; border-radius: 50%;">
+                            <img src="${leader.avatar}" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid ${rankColor};">
                             <div class="leader-info">
                                 <div style="font-weight: bold; color: #fff;">${leader.username}</div>
                                 <div style="font-size: 0.8rem; color: var(--text-muted);">${leader.role_name || 'عضو مميز'}</div>
@@ -955,7 +1114,6 @@
             }
         }
 
-        // تشغيل الدوال عند تحميل الصفحة
         window.onload = init;
     </script>
 </body>
