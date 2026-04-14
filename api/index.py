@@ -3,27 +3,29 @@ import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
-from bson.objectid import ObjectId # استدعينا دي عشان نتعامل مع الـ IDs بتاعت الداتا بيس
+from bson.objectid import ObjectId
 from groq import Groq
 
 app = Flask(__name__)
 CORS(app)
 
+# ==========================================
+# المتغيرات السرية (Environment Variables)
+# ==========================================
 DISCORD_CLIENT_ID = os.environ.get("DISCORD_CLIENT_ID")
 DISCORD_CLIENT_SECRET = os.environ.get("DISCORD_CLIENT_SECRET")
 DISCORD_REDIRECT_URI = os.environ.get("DISCORD_REDIRECT_URI")
 MONGO_URI = os.environ.get("MONGO_URI")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
-# ==========================================
-# ⚠️ ضع هنا أرقام الـ ID الخاصة بك وباقي الإدارة في ديسكورد
-# ==========================================
-ADMIN_IDS = [
-    "1207369496923349032", 
-    "1271175620172447806",
-    "1403187288518951054",
-]
+# المتغيرات الجديدة الخاصة بالبوت والسيرفر
+DISCORD_GUILD_ID = os.environ.get("DISCORD_GUILD_ID") # ايدي سيرفر Victoria
+DISCORD_BOT_TOKEN = os.environ.get("DISCORD_BOT_TOKEN") # توكن البوت
+ADMIN_ROLE_ID = os.environ.get("ADMIN_ROLE_ID") # ايدي رتبة الإدارة
 
+# ==========================================
+# إعداد الخدمات (Groq & MongoDB)
+# ==========================================
 client_ai = None
 if GROQ_API_KEY:
     client_ai = Groq(api_key=GROQ_API_KEY)
@@ -37,8 +39,14 @@ if MONGO_URI:
     except Exception as e:
         print(f"MongoDB Error: {e}")
 
+# ==========================================
+# دوال مساعدة (Helpers)
+# ==========================================
+
 def check_content_with_ai(text):
-    if not client_ai: return True 
+    """فحص النص بالذكاء الاصطناعي"""
+    if not client_ai: 
+        return True 
     try:
         chat_completion = client_ai.chat.completions.create(
             messages=[
@@ -49,16 +57,42 @@ def check_content_with_ai(text):
             temperature=0.1,
         )
         result = chat_completion.choices[0].message.content.strip()
-        if "مرفوض" in result: return False
+        print(f"AI Response: {result}")
+        if "مرفوض" in result: 
+            return False
         return True
-    except Exception:
-        return True # لو حصل عطل في Groq، نعدي النص عشان الموقع ميتعطلش
+    except Exception as e:
+        print(f"Groq AI Error: {e}")
+        return True # السماح بالنص كإجراء وقائي لو السيرفر وقع
+
+def is_user_admin(user_id):
+    """دالة للتأكد من رتبة العضو داخل السيرفر باستخدام البوت"""
+    if not DISCORD_GUILD_ID or not DISCORD_BOT_TOKEN or not ADMIN_ROLE_ID:
+        return False
+        
+    try:
+        resp = requests.get(
+            f'https://discord.com/api/guilds/{DISCORD_GUILD_ID}/members/{user_id}',
+            headers={'Authorization': f'Bot {DISCORD_BOT_TOKEN}'}
+        )
+        if resp.status_code == 200:
+            member_data = resp.json()
+            user_roles = member_data.get('roles', [])
+            return ADMIN_ROLE_ID in user_roles
+        return False
+    except:
+        return False
+
+# ==========================================
+# مسارات السيرفر (API Routes)
+# ==========================================
 
 @app.route('/api/auth/discord', methods=['POST'])
 def discord_auth():
     code = request.json.get('code')
     if not code: return jsonify({'error': 'No code provided'}), 400
 
+    # 1. التوثيق من ديسكورد
     data = {'client_id': DISCORD_CLIENT_ID, 'client_secret': DISCORD_CLIENT_SECRET, 'grant_type': 'authorization_code', 'code': code, 'redirect_uri': DISCORD_REDIRECT_URI}
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     
@@ -66,34 +100,58 @@ def discord_auth():
     if 'error' in token_resp.json(): return jsonify({'error': 'Discord Auth Failed'}), 400
     
     access_token = token_resp.json()['access_token']
+    
+    # 2. جلب البيانات العامة
     user_resp = requests.get('https://discord.com/api/users/@me', headers={'Authorization': f'Bearer {access_token}'})
     user_data = user_resp.json()
+    user_id = user_data['id']
+    avatar_url = f"https://cdn.discordapp.com/avatars/{user_id}/{user_data['avatar']}.png" if user_data.get('avatar') else "https://cdn.discordapp.com/embed/avatars/0.png"
     
-    avatar_url = f"https://cdn.discordapp.com/avatars/{user_data['id']}/{user_data['avatar']}.png" if user_data.get('avatar') else "https://cdn.discordapp.com/embed/avatars/0.png"
-    
-    # التحقق هل العضو إداري أم لا
-    is_admin = user_data['id'] in ADMIN_IDS
+    # 3. التحقق من التواجد في السيرفر والرتبة
+    in_server = False
+    admin_status = False
+
+    if DISCORD_GUILD_ID and DISCORD_BOT_TOKEN:
+        member_resp = requests.get(
+            f'https://discord.com/api/guilds/{DISCORD_GUILD_ID}/members/{user_id}',
+            headers={'Authorization': f'Bot {DISCORD_BOT_TOKEN}'}
+        )
+        if member_resp.status_code == 200:
+            in_server = True
+            admin_status = ADMIN_ROLE_ID in member_resp.json().get('roles', [])
+
+    if not in_server and DISCORD_GUILD_ID: # لو متفعل نظام السيرفر والعضو مش فيه
+        return jsonify({'error': 'يجب أن تكون عضواً في سيرفر Victoria لتتمكن من تسجيل الدخول.'}), 403
 
     return jsonify({
         'status': 'success',
-        'user': {'id': user_data['id'], 'username': user_data['global_name'] or user_data['username'], 'avatar': avatar_url, 'is_admin': is_admin}
+        'user': {
+            'id': user_id, 
+            'username': user_data['global_name'] or user_data['username'], 
+            'avatar': avatar_url, 
+            'is_admin': admin_status
+        }
     }), 200
 
 @app.route('/api/add_contribution', methods=['POST'])
 def add_contribution():
     data = request.json
-    if not data.get('content') or not data.get('username'): return jsonify({'error': 'بيانات ناقصة'}), 400
+    discord_id = data.get('discord_id')
+    
+    if not data.get('content') or not data.get('username') or not discord_id: 
+        return jsonify({'error': 'بيانات ناقصة'}), 400
 
+    # الفحص بالذكاء الاصطناعي
     if not check_content_with_ai(data['content']):
-        return jsonify({'status': 'rejected', 'message': 'عذراً، النص يحتوي على كلمات غير لائقة أو مخالفة للقوانين.'}), 406
+        return jsonify({'status': 'rejected', 'message': 'عذراً، النص يحتوي على كلمات غير لائقة.'}), 406
 
-    is_admin = data.get('discord_id') in ADMIN_IDS
-    # الإدارة مساهمتها بتنزل فوراً، الأعضاء العاديين مساهمتهم بتكون قيد المراجعة
+    # التحقق من الرتبة في الخلفية بأمان
+    is_admin = is_user_admin(discord_id)
     post_status = "approved" if is_admin else "pending"
 
     if db_collection is not None:
         db_collection.insert_one({
-            "discord_id": data.get('discord_id'),
+            "discord_id": discord_id,
             "username": data['username'],
             "avatar": data.get('avatar', ''),
             "type": data['type'],
@@ -109,9 +167,11 @@ def add_contribution():
 def get_contributions():
     if db_collection is None: return jsonify([])
     
-    # لو اللي فاتح الموقع إداري، يشوف كل حاجة. لو عضو عادي، يشوف الموافق عليه بس
-    user_id = request.args.get('discord_id')
-    query = {} if user_id in ADMIN_IDS else {"status": "approved"}
+    discord_id = request.args.get('discord_id')
+    
+    # لو العضو إداري بيشوف الكل، لو مش إداري بيشوف الموافق عليه بس
+    is_admin = is_user_admin(discord_id) if discord_id else False
+    query = {} if is_admin else {"status": "approved"}
     
     cursor = db_collection.find(query).sort('_id', -1).limit(50) 
     results = []
@@ -128,23 +188,30 @@ def get_contributions():
         })
     return jsonify(results), 200
 
-# مسار للإعجاب بالمساهمة
 @app.route('/api/upvote/<post_id>', methods=['POST'])
 def upvote(post_id):
     if db_collection is not None:
         db_collection.update_one({'_id': ObjectId(post_id)}, {'$inc': {'upvotes': 1}})
     return jsonify({'status': 'success'}), 200
 
-# مسار لموافقة الإدارة على المساهمة
 @app.route('/api/approve/<post_id>', methods=['POST'])
 def approve_post(post_id):
+    # طبقة حماية للتأكد إن اللي بيوافق هو إداري فعلاً
+    admin_id = request.json.get('admin_id')
+    if not is_user_admin(admin_id):
+        return jsonify({'error': 'غير مصرح لك بذلك'}), 403
+
     if db_collection is not None:
         db_collection.update_one({'_id': ObjectId(post_id)}, {'$set': {'status': 'approved'}})
     return jsonify({'status': 'success'}), 200
 
-# مسار لحذف المساهمة
 @app.route('/api/delete/<post_id>', methods=['DELETE'])
 def delete_post(post_id):
+    # طبقة حماية للتأكد إن اللي بيحذف هو إداري فعلاً
+    admin_id = request.json.get('admin_id')
+    if not is_user_admin(admin_id):
+        return jsonify({'error': 'غير مصرح لك بذلك'}), 403
+
     if db_collection is not None:
         db_collection.delete_one({'_id': ObjectId(post_id)})
     return jsonify({'status': 'success'}), 200
