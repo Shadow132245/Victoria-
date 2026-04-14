@@ -41,7 +41,6 @@
             overflow-x: hidden;
         }
 
-        /* خلفية الجزيئات */
         #particles-js {
             position: fixed;
             top: 0;
@@ -98,7 +97,7 @@
         }
 
         /* ----------------------------------
-           3. كروت الإدارة (Hall of Fame)
+           3. كروت الإدارة 
         ----------------------------------- */
         .fame-grid {
             display: grid;
@@ -148,7 +147,7 @@
         }
 
         /* ----------------------------------
-           4. نموذج إضافة المساهمة (الـ Form)
+           4. نموذج الإضافة 
         ----------------------------------- */
         .contribution-form-container {
             max-width: 700px;
@@ -161,7 +160,6 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
-        /* أزرار الدخول والخروج */
         .discord-login-btn {
             background-color: var(--discord-color);
             color: white;
@@ -201,7 +199,6 @@
             border-color: var(--danger-color);
         }
 
-        /* حقول الإدخال */
         .input-group {
             margin-bottom: 1.5rem;
             opacity: 0.3;
@@ -243,7 +240,6 @@
             min-height: 120px;
         }
 
-        /* القائمة المنسدلة (Select Box) */
         select.form-control {
             appearance: none;
             -webkit-appearance: none;
@@ -261,7 +257,6 @@
             padding: 15px;
         }
 
-        /* مؤشر الكتابة الحي */
         #typingIndicator {
             display: none;
             color: var(--purple-neon);
@@ -299,16 +294,38 @@
         .submit-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
         /* ----------------------------------
            5. حائط المجتمع (Community Grid)
         ----------------------------------- */
+        
+        /* زر إظهار قائمة المتصدرين */
+        .leaderboard-btn-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .leaderboard-btn {
+            background: rgba(114, 9, 183, 0.2);
+            border: 1px solid var(--purple-neon);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .leaderboard-btn:hover {
+            background: var(--purple-neon);
+            box-shadow: 0 0 20px rgba(114, 9, 183, 0.5);
+        }
+
         .community-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
             margin-bottom: 5rem;
         }
@@ -320,6 +337,8 @@
             padding: 1.5rem;
             transition: var(--transition-smooth);
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .community-card:hover {
@@ -328,7 +347,6 @@
             box-shadow: 0 10px 30px rgba(114, 9, 183, 0.15);
         }
 
-        /* حالة قيد المراجعة */
         .community-card.pending {
             border: 1px dashed var(--danger-color);
             opacity: 0.8;
@@ -361,12 +379,21 @@
             white-space: nowrap;
         }
 
-        /* أزرار التفاعل والإدارة */
+        /* صورة المساهمة (الجديدة) */
+        .post-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 1rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
         .card-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 1.5rem;
+            margin-top: auto;
             padding-top: 1rem;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
@@ -421,7 +448,81 @@
             color: #fff;
         }
 
-        /* الفوتر */
+        /* ----------------------------------
+           6. نافذة المتصدرين (Modal)
+        ----------------------------------- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--purple-neon);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--danger-color);
+        }
+
+        .leaderboard-list {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 10px 15px;
+            border-radius: 12px;
+            gap: 15px;
+        }
+
+        .rank-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--purple-light);
+            width: 30px;
+            text-align: center;
+        }
+
+        .leader-info {
+            flex-grow: 1;
+        }
+
+        .leader-hearts {
+            color: var(--danger-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
         .special-thanks {
             text-align: center;
             padding: 4rem 2rem;
@@ -447,6 +548,17 @@
 <body>
 
     <div id="particles-js"></div>
+
+    <div class="modal-overlay" id="leaderboardModal">
+        <div class="modal-content">
+            <i class="fas fa-times close-modal" onclick="closeLeaderboard()"></i>
+            <h2 style="text-align: center; color: var(--text-main); margin-bottom: 5px;">🏆 لوحة الشرف</h2>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">أكثر الأعضاء حصولاً على الإعجابات</p>
+            <div class="leaderboard-list" id="leaderboardList">
+                <p style="text-align:center; color: var(--text-muted);">جاري التحميل...</p>
+            </div>
+        </div>
+    </div>
 
     <header>
         <h1 class="server-title">Victoria™</h1>
@@ -521,11 +633,22 @@
                     <textarea class="form-control" id="contribText" placeholder="مثال: قمت بتصميم البنرات الخاصة بالرومات الجديدة..."></textarea>
                     <div id="typingIndicator">جاري الكتابة... ✍️</div>
                 </div>
+
+                <div class="input-group" id="groupImage">
+                    <label>رابط صورة لإنجازك (اختياري - من رفع موقع مثل Imgur):</label>
+                    <input type="text" class="form-control" id="contribImage" placeholder="https://i.imgur.com/example.png">
+                </div>
                 
                 <div class="input-group" id="groupSubmit">
                     <button type="button" class="submit-btn" id="submitBtn" onclick="sendContribution()">نشر المساهمة</button>
                 </div>
             </form>
+        </div>
+
+        <div class="leaderboard-btn-container">
+            <button class="leaderboard-btn" onclick="openLeaderboard()">
+                <i class="fas fa-trophy"></i> عرض قائمة المتصدرين
+            </button>
         </div>
 
         <div class="community-grid" id="communityGrid"></div>
@@ -538,7 +661,7 @@
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // إعدادات الخلفية المتحركة
+        // إعدادات الخلفية
         particlesJS('particles-js', { 
             "particles": { 
                 "number": { "value": 60 }, 
@@ -563,15 +686,15 @@
         // ==========================================
         const API_BASE_URL = '/api';
         
-        // ⚠️ ضع هنا الـ Client ID الخاص بتطبيقك
+        // ⚠️ ضع هنا الـ Client ID الخاص بتطبيق ديسكورد
         const CLIENT_ID = '1493579939704868944'; 
         
         // ⚠️ ضع هنا رابط موقعك على Vercel
         const REDIRECT_URI = encodeURIComponent(window.location.origin); 
-
+        
         let user = null;
 
-        // 1. تأثير مؤشر الكتابة الحي
+        // 1. تأثير مؤشر الكتابة
         document.getElementById('contribText').addEventListener('input', function() {
             const indicator = document.getElementById('typingIndicator');
             if (this.value.trim().length > 0) {
@@ -585,20 +708,19 @@
             }
         });
 
-        // 2. زرار تسجيل الدخول
+        // 2. زرار تسجيل الدخول والخروج
         document.getElementById('loginBtn').onclick = () => {
             if (!user) {
                 window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=identify`;
             }
         };
 
-        // 3. زرار تسجيل الخروج
         function logout() {
             localStorage.removeItem('victoria_user_data');
             window.location.href = window.location.pathname; 
         }
 
-        // 4. تحديث شكل الموقع بعد الدخول
+        // 3. تحديث واجهة المستخدم
         function updateUI() {
             if (user) {
                 const btn = document.getElementById('loginBtn');
@@ -616,7 +738,7 @@
             }
         }
 
-        // 5. التحقق من التوثيق عند فتح الصفحة
+        // 4. تهيئة الموقع 
         async function init() {
             const code = new URLSearchParams(window.location.search).get('code');
             
@@ -652,10 +774,11 @@
             loadPosts(); 
         }
 
-        // 6. إرسال المساهمة للباك إند
+        // 5. إرسال المساهمة (محدثة لدعم الصور)
         async function sendContribution() {
             const text = document.getElementById('contribText').value;
             const type = document.getElementById('contribType').value;
+            const imageUrl = document.getElementById('contribImage').value.trim();
             
             if (!text.trim() || !user) return;
 
@@ -672,7 +795,8 @@
                         username: user.username, 
                         avatar: user.avatar, 
                         type: type, 
-                        content: text 
+                        content: text,
+                        image_url: imageUrl
                     })
                 });
                 const data = await res.json();
@@ -680,6 +804,7 @@
                 if (res.status === 201) {
                     alert(data.message);
                     document.getElementById('contribText').value = '';
+                    document.getElementById('contribImage').value = '';
                     document.getElementById('typingIndicator').style.display = 'none';
                     document.getElementById('contribText').style.boxShadow = 'none';
                     loadPosts(); 
@@ -694,7 +819,7 @@
             btn.disabled = false;
         }
 
-        // 7. الإعجاب بالمشاركة (Upvote)
+        // 6. الإعجاب (Upvote)
         async function likePost(btnElement, postId) {
             btnElement.style.color = 'var(--danger-color)';
             btnElement.querySelector('i').classList.replace('far', 'fas');
@@ -705,7 +830,7 @@
             fetch(`${API_BASE_URL}/upvote/${postId}`, { method: 'POST' });
         }
 
-        // 8. أوامر لوحة تحكم الإدارة (موافقة / حذف)
+        // 7. أوامر لوحة تحكم الإدارة
         async function adminAction(action, postId) {
             if(!confirm('هل أنت متأكد من هذا الإجراء؟')) return;
             
@@ -718,7 +843,7 @@
             loadPosts(); 
         }
 
-        // 9. جلب وعرض المساهمات
+        // 8. جلب وعرض المساهمات (محدثة للصور)
         async function loadPosts() {
             const grid = document.getElementById('communityGrid');
             grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> جاري تحميل المساهمات...</p>';
@@ -741,6 +866,8 @@
                     const pendingStyle = p.status === 'pending' ? 'pending' : '';
                     const pendingLabel = p.status === 'pending' ? '<span style="color:var(--danger-color); font-size:0.8rem; font-weight:bold; margin-right: 10px;">(قيد المراجعة)</span>' : '';
                     
+                    const imageHtml = p.image_url ? `<img src="${p.image_url}" class="post-image" alt="إنجاز العضو">` : '';
+
                     let adminButtons = '';
                     if (user && user.is_admin) {
                         adminButtons = `<div class="admin-actions">`;
@@ -763,6 +890,8 @@
                             </div>
                             <p style="color:var(--text-muted); font-size:0.95rem; line-height: 1.6;">${p.content}</p>
                             
+                            ${imageHtml}
+
                             <div class="card-actions">
                                 <button class="upvote-btn" onclick="likePost(this, '${p.id}')">
                                     <i class="far fa-heart"></i> <span style="font-weight: bold; margin-right: 5px;">${p.upvotes}</span>
@@ -773,6 +902,56 @@
                 });
             } catch (e) { 
                 grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--danger-color);">فشل تحميل البيانات من السيرفر.</p>'; 
+            }
+        }
+
+        // 9. دوال نافذة المتصدرين (Leaderboard)
+        function openLeaderboard() {
+            document.getElementById('leaderboardModal').style.display = 'flex';
+            fetchLeaderboard();
+        }
+
+        function closeLeaderboard() {
+            document.getElementById('leaderboardModal').style.display = 'none';
+        }
+
+        async function fetchLeaderboard() {
+            const listDiv = document.getElementById('leaderboardList');
+            listDiv.innerHTML = '<p style="text-align:center; color: var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> جاري جلب الأساطير...</p>';
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/leaderboard`);
+                const leaders = await res.json();
+                
+                if(leaders.length === 0) {
+                    listDiv.innerHTML = '<p style="text-align:center; color: var(--text-muted);">لا يوجد متصدرين حتى الآن.</p>';
+                    return;
+                }
+                
+                listDiv.innerHTML = '';
+                leaders.forEach((leader, index) => {
+                    // تحديد شكل الرقم (الأول ذهبي، الثاني فضي..)
+                    let rankColor = 'var(--purple-light)';
+                    if(index === 0) rankColor = '#ffd700';
+                    if(index === 1) rankColor = '#c0c0c0';
+                    if(index === 2) rankColor = '#cd7f32';
+
+                    listDiv.innerHTML += `
+                        <div class="leaderboard-item">
+                            <div class="rank-number" style="color: ${rankColor};">${index + 1}</div>
+                            <img src="${leader.avatar}" style="width: 40px; height: 40px; border-radius: 50%;">
+                            <div class="leader-info">
+                                <div style="font-weight: bold; color: #fff;">${leader.username}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">${leader.role_name || 'عضو مميز'}</div>
+                            </div>
+                            <div class="leader-hearts">
+                                ${leader.total_upvotes} <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch(e) {
+                listDiv.innerHTML = '<p style="text-align:center; color: var(--danger-color);">حدث خطأ أثناء جلب المتصدرين.</p>';
             }
         }
 
