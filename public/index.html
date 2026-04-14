@@ -9,287 +9,80 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* ----------------------------------
-           1. الألوان والمتغيرات الأساسية
-        ----------------------------------- */
         :root {
-            --bg-main: #060608; 
-            --bg-card: #121217; 
-            --bg-input: rgba(255, 255, 255, 0.03);
-            --purple-deep: #1e0950; 
-            --purple-neon: #7209b7; 
-            --purple-light: #b5179e;
-            --text-main: #f8fafc; 
-            --text-muted: #94a3b8;
-            --discord-color: #5865F2; 
-            --success-color: #23a559; 
-            --danger-color: #f23f42;
-            --card-border: rgba(114, 9, 183, 0.2); 
-            --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --bg-main: #060608; --bg-card: #121217; --bg-input: rgba(255, 255, 255, 0.03);
+            --purple-deep: #1e0950; --purple-neon: #7209b7; --purple-light: #b5179e;
+            --text-main: #f8fafc; --text-muted: #94a3b8;
+            --discord-color: #5865F2; --success-color: #23a559; --danger-color: #f23f42;
+            --card-border: rgba(114, 9, 183, 0.2); --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); overflow-x: hidden; }
+        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at center, var(--purple-deep) 0%, var(--bg-main) 70%); }
+        
+        header { text-align: center; padding: 5rem 2rem 2rem; position: relative; z-index: 10; }
+        .server-title { font-size: 4.5rem; font-weight: 800; background: linear-gradient(135deg, var(--text-main), var(--purple-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 40px rgba(114, 9, 183, 0.4); margin-bottom: 1rem; }
+        .header-desc { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; line-height: 2; }
+        .section-title { text-align: center; font-size: 2.5rem; font-weight: 800; margin: 4rem 0 2rem; color: var(--text-main); }
+        .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 10; }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Cairo', sans-serif; 
-        }
-
-        body { 
-            background-color: var(--bg-main); 
-            color: var(--text-main); 
-            overflow-x: hidden; 
-        }
-
-        /* خلفية الجزيئات */
-        #particles-js { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            z-index: -1; 
-            background: radial-gradient(circle at center, var(--purple-deep) 0%, var(--bg-main) 70%); 
-        }
-
-        /* ----------------------------------
-           2. الهيدر والعناوين
-        ----------------------------------- */
-        header { 
-            text-align: center; 
-            padding: 5rem 2rem 2rem; 
-            position: relative; 
-            z-index: 10; 
-        }
-
-        .server-title { 
-            font-size: 4.5rem; 
-            font-weight: 800; 
-            background: linear-gradient(135deg, var(--text-main), var(--purple-light)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            text-shadow: 0 0 40px rgba(114, 9, 183, 0.4); 
-            margin-bottom: 1rem; 
-        }
-
-        .header-desc { 
-            font-size: 1.2rem; 
-            color: var(--text-muted); 
-            max-width: 700px; 
-            margin: 0 auto; 
-            line-height: 2; 
-        }
-
-        .section-title { 
-            text-align: center; 
-            font-size: 2.5rem; 
-            font-weight: 800; 
-            margin: 4rem 0 2rem; 
-            color: var(--text-main); 
-        }
-
-        .container { 
-            width: 100%; 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            padding: 0 2rem; 
-            position: relative; 
-            z-index: 10; 
-        }
-
-        /* ----------------------------------
-           3. كروت الإدارة (Hall of Fame)
-        ----------------------------------- */
-        .fame-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
-            gap: 2.5rem; 
-            margin-bottom: 5rem; 
-        }
-
-        .fame-card { 
-            background-color: rgba(18, 18, 23, 0.7); 
-            backdrop-filter: blur(10px); 
-            border: 1px solid var(--card-border); 
-            border-radius: 24px; 
-            padding: 3rem 2.5rem; 
-            text-align: center; 
-            transition: var(--transition-smooth); 
-        }
-
-        .fame-card:hover { 
-            transform: translateY(-10px); 
-            border-color: rgba(114, 9, 183, 0.5); 
-            box-shadow: 0 20px 50px rgba(114, 9, 183, 0.2); 
-            background-color: rgba(18, 18, 23, 0.95);
-        }
-
-        .role-badge { 
-            display: inline-block; 
-            background: rgba(114, 9, 183, 0.15); 
-            color: var(--purple-light); 
-            padding: 0.5rem 1.4rem; 
-            border-radius: 14px; 
-            font-size: 0.9rem; 
-            font-weight: 700; 
-            margin-bottom: 2rem; 
-            border: 1px solid rgba(114, 9, 183, 0.3); 
-        }
-
+        .fame-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; margin-bottom: 5rem; }
+        .fame-card { background-color: rgba(18, 18, 23, 0.7); backdrop-filter: blur(10px); border: 1px solid var(--card-border); border-radius: 24px; padding: 3rem 2.5rem; text-align: center; transition: var(--transition-smooth); }
+        .fame-card:hover { transform: translateY(-10px); border-color: rgba(114, 9, 183, 0.5); box-shadow: 0 20px 50px rgba(114, 9, 183, 0.2); background-color: rgba(18, 18, 23, 0.95); }
+        .role-badge { display: inline-block; background: rgba(114, 9, 183, 0.15); color: var(--purple-light); padding: 0.5rem 1.4rem; border-radius: 14px; font-size: 0.9rem; font-weight: 700; margin-bottom: 2rem; border: 1px solid rgba(114, 9, 183, 0.3); }
         .member-name { font-size: 2.1rem; font-weight: 800; margin-bottom: 1rem; }
-        .member-desc { color: var(--text-muted); line-height: 1.8; }
 
-        /* ----------------------------------
-           4. نموذج إضافة المساهمة (الـ Form)
-        ----------------------------------- */
-        .contribution-form-container { 
-            max-width: 700px; 
-            margin: 0 auto 4rem; 
-            background: rgba(18, 18, 23, 0.8); 
-            backdrop-filter: blur(15px); 
-            border: 1px solid var(--card-border); 
-            border-radius: 20px; 
-            padding: 3rem; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-
-        /* أزرار الدخول والخروج */
-        .discord-login-btn { 
-            background-color: var(--discord-color); 
-            color: white; 
-            border: none; 
-            padding: 1rem; 
-            border-radius: 10px; 
-            font-size: 1.1rem; 
-            font-weight: 600; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
-            width: 100%; 
-            transition: var(--transition-smooth); 
-        }
-        
+        .contribution-form-container { max-width: 700px; margin: 0 auto 4rem; background: rgba(18, 18, 23, 0.8); backdrop-filter: blur(15px); border: 1px solid var(--card-border); border-radius: 20px; padding: 3rem; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .discord-login-btn { background-color: var(--discord-color); color: white; border: none; padding: 1rem; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; transition: var(--transition-smooth); }
         .discord-login-btn:hover { background-color: #4752C4; transform: translateY(-3px); }
-        
-        .logout-btn { 
-            background: transparent; 
-            border: 1px solid rgba(242, 63, 66, 0.3); 
-            color: var(--danger-color); 
-            padding: 0.5rem 1rem; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            margin: 1rem auto 0; 
-            display: none; /* مخفي في البداية */
-            transition: 0.3s; 
-        }
+        .logout-btn { background: transparent; border: 1px solid rgba(242, 63, 66, 0.3); color: var(--danger-color); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; margin: 1rem auto 0; display: none; transition: 0.3s; }
         .logout-btn:hover { background: rgba(242, 63, 66, 0.1); border-color: var(--danger-color); }
-
-        /* حقول الإدخال */
-        .input-group { 
-            margin-bottom: 1.5rem; 
-            opacity: 0.3; /* خافت حتى يسجل دخول */
-            pointer-events: none; 
-            transition: 0.4s; 
-        }
+        
+        .input-group { margin-bottom: 1.5rem; opacity: 0.3; pointer-events: none; transition: 0.4s; position: relative; }
         .input-group.active { opacity: 1; pointer-events: all; }
         .input-group label { display: block; margin-bottom: 0.8rem; color: var(--text-muted); }
         
-        .form-control { 
-            width: 100%; 
-            background: var(--bg-input); 
-            border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 10px; 
-            padding: 1rem; 
-            color: var(--text-main); 
-            font-size: 1rem; 
-            transition: var(--transition-smooth);
-        }
+        .form-control { width: 100%; background: var(--bg-input); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 1rem; color: var(--text-main); font-size: 1rem; transition: var(--transition-smooth); }
         .form-control:focus { outline: none; border-color: var(--purple-neon); box-shadow: 0 0 15px rgba(114, 9, 183, 0.2); }
         textarea.form-control { resize: vertical; min-height: 120px; }
+        
+        select.form-control { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b5179e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 1rem center; background-size: 1em; cursor: pointer; }
+        select.form-control option { background-color: #09090b; color: #ffffff; padding: 15px; }
 
-        /* حل مشكلة القائمة المنسدلة (Select Box) */
-        select.form-control {
-            appearance: none; /* إخفاء السهم الافتراضي */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b5179e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: left 1rem center; /* السهم على اليسار عشان إحنا RTL */
-            background-size: 1em;
-            cursor: pointer;
-        }
+        /* مؤشر الكتابة الحي */
+        #typingIndicator { display: none; color: var(--purple-neon); font-size: 0.85rem; font-weight: 600; margin-top: 8px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
-        /* تنسيق الخيارات من الداخل لتكون سوداء */
-        select.form-control option {
-            background-color: #09090b; /* أسود داكن */
-            color: #ffffff; /* نص أبيض */
-            padding: 15px;
-        }
-
-        .submit-btn { 
-            background: linear-gradient(45deg, var(--purple-neon), var(--purple-light)); 
-            color: white; 
-            border: none; 
-            padding: 1rem; 
-            width: 100%; 
-            border-radius: 10px; 
-            font-size: 1.2rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            margin-top: 1rem;
-        }
+        .submit-btn { background: linear-gradient(45deg, var(--purple-neon), var(--purple-light)); color: white; border: none; padding: 1rem; width: 100%; border-radius: 10px; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
         .submit-btn:hover { box-shadow: 0 0 25px rgba(114, 9, 183, 0.5); transform: translateY(-2px); }
-        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* ----------------------------------
-           5. حائط المجتمع (Community Grid)
-        ----------------------------------- */
-        .community-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 2rem; 
-            margin-bottom: 5rem; 
-        }
+        .community-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 5rem; }
+        .community-card { background: rgba(18, 18, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; transition: var(--transition-smooth); position: relative; }
+        .community-card:hover { transform: translateY(-5px); border-color: var(--purple-light); box-shadow: 0 10px 30px rgba(114, 9, 183, 0.15); }
+        
+        /* ستايل المراجعة (للإدارة فقط) */
+        .community-card.pending { border: 1px dashed var(--danger-color); opacity: 0.8; }
+        
+        .user-avatar { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--purple-neon); object-fit: cover; }
+        .verified-badge { color: #00b0f4; font-size: 1rem; margin-right: 5px; text-shadow: 0 0 10px rgba(0, 176, 244, 0.5); }
+        
+        /* أزرار التفاعل والإدارة */
+        .card-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        .upvote-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+        .upvote-btn:hover { color: var(--danger-color); transform: scale(1.1); }
+        
+        .admin-actions button { border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 0.85rem; margin-left: 5px; transition: 0.2s; }
+        .btn-approve { background: rgba(35, 165, 89, 0.2); color: var(--success-color); border: 1px solid var(--success-color) !important; }
+        .btn-approve:hover { background: var(--success-color); color: #fff; }
+        .btn-delete { background: rgba(242, 63, 66, 0.2); color: var(--danger-color); border: 1px solid var(--danger-color) !important; }
+        .btn-delete:hover { background: var(--danger-color); color: #fff; }
 
-        .community-card { 
-            background: rgba(18, 18, 23, 0.6); 
-            border: 1px solid rgba(255,255,255,0.05); 
-            border-radius: 16px; 
-            padding: 1.5rem; 
-            transition: var(--transition-smooth);
-        }
-        .community-card:hover { 
-            transform: translateY(-5px); 
-            border-color: var(--purple-light); 
-            box-shadow: 0 10px 30px rgba(114, 9, 183, 0.15);
-        }
-
-        .user-avatar { 
-            width: 55px; 
-            height: 55px; 
-            border-radius: 50%; 
-            border: 2px solid var(--purple-neon); 
-            object-fit: cover;
-        }
-
-        /* الفوتر */
-        .special-thanks { 
-            text-align: center; 
-            padding: 4rem 2rem; 
-            background: linear-gradient(to top, #060608, transparent); 
-            border-top: 1px solid rgba(114, 9, 183, 0.15); 
-        }
-        .special-thanks h3 { font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--purple-light); }
-        .special-thanks p { color: var(--text-muted); max-width: 800px; margin: 0 auto; line-height: 2; font-size: 1.1rem; }
+        .special-thanks { text-align: center; padding: 4rem 2rem; background: linear-gradient(to top, #060608, transparent); border-top: 1px solid rgba(114, 9, 183, 0.15); }
     </style>
 </head>
 <body>
-
     <div id="particles-js"></div>
-
+    
     <header>
         <h1 class="server-title">Victoria™</h1>
         <p class="header-desc">رسالة شكر وعرفان لكل من ساهم في بناء هذا الصرح الشامخ. بجهودكم نستمر ونرتقي.</p>
@@ -313,10 +106,7 @@
             <button class="discord-login-btn" id="loginBtn">
                 <i class="fab fa-discord"></i> تسجيل الدخول بحساب ديسكورد
             </button>
-            
-            <button id="logoutBtn" class="logout-btn" onclick="logout()">
-                تسجيل الخروج <i class="fas fa-sign-out-alt"></i>
-            </button>
+            <button id="logoutBtn" class="logout-btn" onclick="logout()">تسجيل الخروج <i class="fas fa-sign-out-alt"></i></button>
 
             <form id="contributionForm" style="margin-top: 2.5rem;">
                 <div class="input-group" id="groupType">
@@ -329,12 +119,11 @@
                         <option value="دعم مادي أو معنوي">دعم مادي أو معنوي ✨</option>
                     </select>
                 </div>
-                
                 <div class="input-group" id="groupText">
                     <label>اشرح مساهمتك باختصار (يتم الفحص بالذكاء الاصطناعي):</label>
                     <textarea class="form-control" id="contribText" placeholder="مثال: قمت بتصميم البنرات الخاصة بالرومات الجديدة..."></textarea>
+                    <div id="typingIndicator">جاري الكتابة... ✍️</div>
                 </div>
-                
                 <div class="input-group" id="groupSubmit">
                     <button type="button" class="submit-btn" id="submitBtn" onclick="sendContribution()">نشر المساهمة</button>
                 </div>
@@ -351,85 +140,94 @@
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // إعدادات الخلفية المتحركة
-        particlesJS('particles-js', { 
-            "particles": { "number": { "value": 60 }, "color": { "value": "#7209b7" }, "opacity": { "value": 0.3 }, "size": { "value": 3 }, "line_linked": { "enable": true, "distance": 150, "color": "#7209b7", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } 
-        });
+        // إعدادات الخلفية
+        particlesJS('particles-js', { "particles": { "number": { "value": 60 }, "color": { "value": "#7209b7" }, "opacity": { "value": 0.3 }, "size": { "value": 3 }, "line_linked": { "enable": true, "distance": 150, "color": "#7209b7", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } });
 
         // ==========================================
         // إعدادات الـ API و الديسكورد
         // ==========================================
         const API_BASE_URL = '/api';
         
-        // ⚠️ ضع هنا الـ Client ID الخاص بتطبيقك
+        // ⚠️ ضع هنا الـ Client ID الخاص بتطبيق ديسكورد
         const CLIENT_ID = '1493579939704868944'; 
         
         // ⚠️ ضع هنا رابط موقعك على Vercel
         const REDIRECT_URI = encodeURIComponent(window.location.origin); 
-
+        
         let user = null;
 
-        // 1. زرار تسجيل الدخول
-        document.getElementById('loginBtn').onclick = () => {
-            if (!user) {
-                window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=identify`;
+        // 1. تأثير مؤشر الكتابة (Typing Indicator)
+        document.getElementById('contribText').addEventListener('input', function() {
+            const indicator = document.getElementById('typingIndicator');
+            if (this.value.trim().length > 0) {
+                indicator.style.display = 'block';
+                this.style.boxShadow = '0 0 20px rgba(114, 9, 183, 0.4)';
+                this.style.borderColor = 'var(--purple-neon)';
+            } else {
+                indicator.style.display = 'none';
+                this.style.boxShadow = 'none';
+                this.style.borderColor = 'rgba(255,255,255,0.1)';
             }
+        });
+
+        // 2. زرار تسجيل الدخول
+        document.getElementById('loginBtn').onclick = () => {
+            if (!user) window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=identify`;
         };
 
-        // 2. زرار تسجيل الخروج
+        // 3. زرار تسجيل الخروج
         function logout() {
             localStorage.removeItem('victoria_user_data');
-            window.location.href = window.location.pathname; // يعمل ريفريش ويمسح الكود من الرابط
+            window.location.href = window.location.pathname; 
         }
 
-        // 3. تحديث شكل الموقع بعد الدخول
+        // 4. تحديث شكل الموقع بعد الدخول
         function updateUI() {
             if (user) {
                 const btn = document.getElementById('loginBtn');
-                btn.innerHTML = `<img src="${user.avatar}" style="width:30px; height:30px; border-radius:50%; border:1px solid #fff;"> متصل باسم (${user.username})`;
+                // لو هو إداري، يظهرله علامة التوثيق في الزرار نفسه
+                const adminTag = user.is_admin ? '<i class="fas fa-check-circle verified-badge" style="font-size: 1rem;"></i>' : '';
+                
+                btn.innerHTML = `<img src="${user.avatar}" style="width:30px; height:30px; border-radius:50%; border:1px solid #fff;"> ${adminTag} متصل باسم (${user.username})`;
                 btn.style.backgroundColor = 'var(--success-color)';
                 btn.style.cursor = 'default';
                 
                 document.getElementById('logoutBtn').style.display = 'block';
-                
-                // تفعيل حقول الإدخال
                 document.querySelectorAll('.input-group').forEach(el => el.classList.add('active'));
             }
         }
 
-        // 4. التحقق من التوثيق عند فتح الصفحة
+        // 5. تهيئة الموقع والتحقق من التوثيق
         async function init() {
             const code = new URLSearchParams(window.location.search).get('code');
-            
-            // لو العضو راجع من ديسكورد ومعاه كود
             if (code) {
                 const btn = document.getElementById('loginBtn');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق من الحساب...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق من حسابك...';
                 try {
                     const res = await fetch(`${API_BASE_URL}/auth/discord`, {
                         method: 'POST', headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({ code })
                     });
                     const data = await res.json();
+                    
                     if (data.status === 'success') {
                         user = data.user;
                         localStorage.setItem('victoria_user_data', JSON.stringify(user));
                         window.history.replaceState({}, document.title, window.location.pathname);
+                    } else {
+                        alert(data.error);
                     }
                 } catch (e) { console.error("Discord Auth failed"); }
             }
 
-            // لو العضو مسجل من قبل كده
             const saved = localStorage.getItem('victoria_user_data');
-            if (saved && !user) {
-                user = JSON.parse(saved);
-            }
+            if (saved && !user) user = JSON.parse(saved);
 
             updateUI();
-            loadPosts(); // تحميل المشاركات
+            loadPosts(); 
         }
 
-        // 5. إرسال المساهمة للباك إند
+        // 6. إرسال المساهمة
         async function sendContribution() {
             const text = document.getElementById('contribText').value;
             const type = document.getElementById('contribType').value;
@@ -442,29 +240,58 @@
             try {
                 const res = await fetch(`${API_BASE_URL}/add_contribution`, {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ username: user.username, avatar: user.avatar, type: type, content: text })
+                    body: JSON.stringify({ discord_id: user.id, username: user.username, avatar: user.avatar, type: type, content: text })
                 });
                 const data = await res.json();
                 
                 if (res.status === 201) {
-                    alert('تم النشر بنجاح! شكراً لمساهمتك.');
+                    alert(data.message); // هتظهر رسالة لو اتقبلت، ورسالة تانية لو قيد المراجعة
                     document.getElementById('contribText').value = '';
-                    loadPosts(); // تحديث الحائط
+                    document.getElementById('typingIndicator').style.display = 'none';
+                    document.getElementById('contribText').style.boxShadow = 'none';
+                    loadPosts(); 
                 } else { 
                     alert('⚠️ ' + data.message); 
                 }
-            } catch (e) { alert('خطأ في الاتصال بالسيرفر. حاول مجدداً.'); }
+            } catch (e) { alert('خطأ في الاتصال بالسيرفر.'); }
             
-            btn.innerHTML = 'نشر المساهمة'; 
-            btn.disabled = false;
+            btn.innerHTML = 'نشر المساهمة'; btn.disabled = false;
         }
 
-        // 6. جلب وعرض المساهمات
+        // 7. الإعجاب (Upvote)
+        async function likePost(btnElement, postId) {
+            // تأثير بصري فوري
+            btnElement.style.color = 'var(--danger-color)';
+            btnElement.querySelector('i').classList.replace('far', 'fas');
+            let countSpan = btnElement.querySelector('span');
+            countSpan.innerText = parseInt(countSpan.innerText) + 1;
+            btnElement.onclick = null; // يمنع الضغط مرتين على نفس البوست في نفس الجلسة
+            
+            // إرسال للباك إند
+            fetch(`${API_BASE_URL}/upvote/${postId}`, { method: 'POST' });
+        }
+
+        // 8. أوامر لوحة تحكم الإدارة (موافقة / حذف)
+        async function adminAction(action, postId) {
+            if(!confirm('هل أنت متأكد من هذا الإجراء؟')) return;
+            
+            await fetch(`${API_BASE_URL}/${action}/${postId}`, { 
+                method: action === 'delete' ? 'DELETE' : 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ admin_id: user.id })
+            });
+            
+            loadPosts(); 
+        }
+
+        // 9. جلب وعرض المساهمات
         async function loadPosts() {
             const grid = document.getElementById('communityGrid');
             grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> جاري تحميل المساهمات...</p>';
             try {
-                const res = await fetch(`${API_BASE_URL}/get_contributions`);
+                // نرسل الايدي الخاص بنا، ليتمكن الباك إند من جلب المساهمات المخفية إذا كنا من الإدارة
+                const fetchUrl = user ? `${API_BASE_URL}/get_contributions?discord_id=${user.id}` : `${API_BASE_URL}/get_contributions`;
+                const res = await fetch(fetchUrl);
                 const posts = await res.json();
                 
                 if(posts.length === 0) {
@@ -474,22 +301,43 @@
                 
                 grid.innerHTML = '';
                 posts.forEach(p => {
+                    // إعداد شكل الكارت حسب الرتبة والحالة
+                    const adminBadge = p.is_admin ? '<i class="fas fa-check-circle verified-badge" title="عضو إدارة"></i>' : '';
+                    const pendingStyle = p.status === 'pending' ? 'pending' : '';
+                    const pendingLabel = p.status === 'pending' ? '<span style="color:var(--danger-color); font-size:0.8rem; font-weight:bold; margin-right: 10px;">(قيد المراجعة)</span>' : '';
+                    
+                    // أزرار الإدارة بتظهر بس لو المستخدم الحالي هو إداري
+                    let adminButtons = '';
+                    if (user && user.is_admin) {
+                        adminButtons = `<div class="admin-actions">`;
+                        if (p.status === 'pending') {
+                            adminButtons += `<button class="btn-approve" onclick="adminAction('approve', '${p.id}')">موافقة ✅</button>`;
+                        }
+                        adminButtons += `<button class="btn-delete" onclick="adminAction('delete', '${p.id}')">حذف ❌</button></div>`;
+                    }
+
                     grid.innerHTML += `
-                        <div class="community-card">
+                        <div class="community-card ${pendingStyle}">
                             <div style="display:flex; align-items:center; gap:15px; margin-bottom:1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
                                 <img src="${p.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" class="user-avatar">
                                 <div>
-                                    <h4 style="margin:0; font-size: 1.1rem; color: #fff;">${p.username}</h4>
+                                    <h4 style="margin:0; font-size: 1.1rem; color: #fff; display: flex; align-items: center;">${adminBadge} ${p.username} ${pendingLabel}</h4>
                                     <span style="font-size:12px; color:var(--purple-light); background: rgba(114, 9, 183, 0.15); padding: 3px 8px; border-radius: 10px; display: inline-block; margin-top: 5px;">${p.type}</span>
                                 </div>
                             </div>
                             <p style="color:var(--text-muted); font-size:0.95rem; line-height: 1.6;">${p.content}</p>
+                            
+                            <div class="card-actions">
+                                <button class="upvote-btn" onclick="likePost(this, '${p.id}')">
+                                    <i class="far fa-heart"></i> <span style="font-weight: bold; margin-right: 5px;">${p.upvotes}</span>
+                                </button>
+                                ${adminButtons}
+                            </div>
                         </div>`;
                 });
             } catch (e) { grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color: var(--danger-color);">فشل تحميل البيانات من السيرفر.</p>'; }
         }
 
-        // تشغيل الدوال عند تحميل الصفحة
         window.onload = init;
     </script>
 </body>
