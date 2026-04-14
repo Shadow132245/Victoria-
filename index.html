@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شكر وتقدير | Victoria™</title>
+    <title>Victoria™ | حائط المجتمع</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-main: #060608;
             --bg-card: rgba(18, 18, 23, 0.7);
+            --bg-input: rgba(255, 255, 255, 0.05);
             --purple-deep: #1e0950;
             --purple-neon: #7209b7;
             --purple-light: #b5179e;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --discord-color: #5865F2;
+            --success-color: #23a559;
             --card-border: rgba(114, 9, 183, 0.15);
-            --neon-shadow: 0 0 15px rgba(114, 9, 183, 0.5);
-            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         * {
@@ -29,15 +32,10 @@
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* حاوية الخلفية الجزيئية */
         #particles-js {
             position: fixed;
             top: 0;
@@ -48,340 +46,426 @@
             background: radial-gradient(circle at center, var(--purple-deep) 0%, var(--bg-main) 70%);
         }
 
-        header {
+        /* --- العناوين والأقسام --- */
+        .section-title {
             text-align: center;
-            padding: 6rem 2rem 3rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        .server-title {
-            font-size: 4.5rem;
+            font-size: 3rem;
             font-weight: 800;
+            margin: 4rem 0 2rem;
             background: linear-gradient(135deg, var(--text-main), var(--purple-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px rgba(114, 9, 183, 0.4);
-            margin-bottom: 1rem;
-            letter-spacing: 3px;
-            opacity: 0;
-            animation: textReveal 1s ease-out forwards;
         }
 
-        .header-desc {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 2;
-            opacity: 0;
-            animation: textReveal 1s ease-out 0.3s forwards;
-        }
-
-        /* الحاوية الرئيسية للكروت */
         .container {
             width: 100%;
             max-width: 1400px;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 5rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* تصميم الكروت البريميوم */
-        .card {
-            background-color: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 3rem 2.5rem;
-            text-align: center;
-            transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            opacity: 0; /* للظهور عند السكرول */
-            transform: translateY(50px) scale(0.9);
-            cursor: pointer;
-        }
-
-        /* ستايل عند ظهور الكرت (بواسطة JS) */
-        .card.show-card {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        /* الوميض العلوي للكرت */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at var(--shimmer-x, 50%) var(--shimmer-y, 50%), rgba(114, 9, 183, 0.15) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* شريط النيون العلوي عند الـ Hover */
-        .card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--purple-neon), var(--purple-light), transparent);
-            transform: scaleX(0);
-            transition: var(--transition-smooth);
-            transform-origin: center;
-            opacity: 0.7;
-        }
-
-        .card:hover {
-            transform: translateY(-15px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-            border-color: rgba(114, 9, 183, 0.3);
-            box-shadow: 0 20px 50px rgba(114, 9, 183, 0.2);
-            background-color: rgba(18, 18, 23, 0.9);
-        }
-
-        .card:hover::before {
-            opacity: 1;
-        }
-
-        .card:hover::after {
-            transform: scaleX(1);
-        }
-
-        .role-badge {
-            display: inline-block;
-            background: rgba(114, 9, 183, 0.1);
-            color: var(--purple-light);
-            padding: 0.5rem 1.4rem;
-            border-radius: 14px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin: 0 auto 2rem;
-            border: 1px solid rgba(114, 9, 183, 0.2);
-            width: fit-content;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .member-name {
-            font-size: 2.1rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            color: var(--text-main);
-            transition: var(--transition-smooth);
-            position: relative;
-            z-index: 2;
-        }
-
-        .card:hover .member-name {
-            color: #fff;
-            text-shadow: var(--neon-shadow);
-        }
-
-        .member-desc {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            line-height: 1.8;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* القسم الختامي البريميوم */
-        .special-thanks {
-            text-align: center;
-            padding: 5rem 2rem;
-            background: linear-gradient(to top, #111, transparent);
-            width: 100%;
-            margin-top: auto;
-            border-top: 1px solid rgba(114, 9, 183, 0.15);
-            position: relative;
-            z-index: 10;
-        }
-
-        .special-thanks h3 {
-            font-size: 2rem;
-            color: var(--text-main);
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            animation: textReveal 1s ease-out 0.6s forwards;
-        }
-
-        .special-thanks p {
-            color: var(--text-muted);
-            max-width: 900px;
             margin: 0 auto;
-            line-height: 2.2;
+            padding: 0 2rem;
+        }
+
+        /* --- نموذج إضافة مساهمة (Interactive Form) --- */
+        .contribution-form-container {
+            max-width: 700px;
+            margin: 0 auto 5rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h3 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .discord-login-btn {
+            background-color: var(--discord-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition-smooth);
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .discord-login-btn:hover {
+            background-color: #4752C4;
+            transform: translateY(-2px);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            opacity: 0.5; /* سيكون خافتاً حتى يسجل الدخول */
+            pointer-events: none; /* غير قابل للتفاعل حتى يسجل الدخول */
+            transition: var(--transition-smooth);
+        }
+
+        .input-group.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--purple-neon);
+            box-shadow: 0 0 15px rgba(114, 9, 183, 0.3);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--purple-neon), var(--purple-light));
+            color: white;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 10px;
             font-size: 1.2rem;
-            opacity: 0;
-            animation: textReveal 1s ease-out 0.9s forwards;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
         }
 
-        /* تأثيرات الظهور */
-        @keyframes textReveal {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .submit-btn:hover {
+            box-shadow: 0 0 20px rgba(114, 9, 183, 0.6);
+            transform: translateY(-2px);
         }
 
-        /* تصميم للموبايل والشاشات الصغيرة */
-        @media (max-width: 1024px) {
-            .container { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        /* --- حائط المجتمع (Community Grid) --- */
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
         }
 
-        @media (max-width: 768px) {
-            .server-title { font-size: 3rem; }
-            .header-desc { font-size: 1.1rem; }
-            .container { padding: 1.5rem; gap: 1.5rem; }
-            .card { padding: 2.5rem 1.5rem; }
-            .member-name { font-size: 1.8rem; }
+        .community-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: var(--transition-smooth);
+            position: relative;
         }
+
+        .community-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--purple-neon);
+            box-shadow: 0 10px 30px rgba(114, 9, 183, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--purple-neon);
+        }
+
+        .user-info h4 {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .verified-badge {
+            color: #00b0f4; /* لون التوثيق في ديسكورد */
+            font-size: 0.9rem;
+        }
+
+        .contribution-type {
+            font-size: 0.8rem;
+            color: var(--purple-light);
+            background: rgba(114, 9, 183, 0.15);
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .card-body p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* زر الإعجاب (Upvote) */
+        .card-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .upvote-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .upvote-btn:hover, .upvote-btn.active {
+            color: var(--purple-light);
+        }
+
+        .upvote-btn i {
+            transition: transform 0.2s;
+        }
+
+        .upvote-btn:hover i {
+            transform: scale(1.2);
+        }
+        
+        /* مؤشر الكتابة (Typing Effect) */
+        .typing-indicator {
+            font-size: 0.85rem;
+            color: var(--success-color);
+            margin-top: 0.5rem;
+            display: none;
+        }
+
     </style>
 </head>
 <body>
 
     <div id="particles-js"></div>
 
-    <header>
-        <h1 class="server-title">Victoria™</h1>
-        <p class="header-desc">
-            رسالة شكر وعرفان، نُقشت بحروف من نور، لكل قلبٍ وعقلٍ ساهم في بناء هذا الصرح الشامخ. بكم نرتقي، وبجهودكم نُخلّد.
-        </p>
-    </header>
+    <h2 class="section-title">حائط مساهمات المجتمع</h2>
 
-    <div class="container" id="members-container">
-        <div class="card">
-            <div class="role-badge">Server Owner 👑</div>
-            <h2 class="member-name">Marvin</h2>
-            <p class="member-desc">مؤسس الكيان وصاحب الرؤية الأولى، شكراً لقيادتك الحكيمة وجهودك الجبارة لتطوير السيرفر.</p>
+    <div class="container">
+        
+        <div class="contribution-form-container">
+            <div class="form-header">
+                <h3>شارك إنجازك في السيرفر</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">هل ساعدت في تصميم، برمجة، أو حتى اقتراح فكرة؟ اكتبها هنا!</p>
+            </div>
+
+            <button class="discord-login-btn" id="loginBtn" onclick="simulateLogin()">
+                <i class="fab fa-discord"></i> تسجيل الدخول بحساب ديسكورد
+            </button>
+
+            <form id="contributionForm">
+                <div class="input-group" id="formInputs">
+                    <label>نوع المساهمة</label>
+                    <select class="form-control" id="contribType">
+                        <option value="برمجة وبوتات">برمجة وبوتات 💻</option>
+                        <option value="تصميم وجرافيك">تصميم وجرافيك 🎨</option>
+                        <option value="إدارة وتنظيم">إدارة وتنظيم 🛡️</option>
+                        <option value="أفكار واقتراحات">أفكار واقتراحات 💡</option>
+                        <option value="دعم وتفاعل">دعم وتفاعل ✨</option>
+                    </select>
+                </div>
+
+                <div class="input-group" id="formText">
+                    <label>ماذا قدمت للسيرفر؟ (يمنع استخدام الكلمات غير اللائقة)</label>
+                    <textarea class="form-control" id="contribText" placeholder="اكتب مساهمتك هنا... مثال: قمت بتصميم شعار الروم الجديد..." oninput="showTypingIndicator()"></textarea>
+                    <div class="typing-indicator" id="typingIndicator">يتم فحص النص بالذكاء الاصطناعي... <i class="fas fa-spinner fa-spin"></i></div>
+                </div>
+
+                <div class="input-group" id="formSubmit">
+                    <button type="button" class="submit-btn" onclick="addContribution()">نشر المساهمة</button>
+                </div>
+            </form>
         </div>
 
-        <div class="card">
-            <div class="role-badge">1st Co-Owner & Investor 💎</div>
-            <h2 class="member-name">Soul GoodMan</h2>
-            <p class="member-desc">المستثمر والداعم الأول، شكراً لإيمانك اللامحدود بمشروعنا ودعمك السخي الذي لا يتوقف.</p>
-        </div>
+        <div class="community-grid" id="communityGrid">
+            <div class="community-card">
+                <div class="card-header">
+                    <img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <h4>Ahmed Gamer</h4>
+                        <span class="contribution-type">أفكار واقتراحات 💡</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>اقترحت فكرة نظام النقاط الجديد في ديسكورد وساعدت الإدارة في ضبط أرقام الجوائز للمتفاعلين.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="upvote-btn" onclick="toggleUpvote(this)">
+                        <i class="fas fa-heart"></i> <span class="count">12</span>
+                    </button>
+                </div>
+            </div>
 
-        <div class="card">
-            <div class="role-badge">2nd Co-Owner ⚡</div>
-            <h2 class="member-name">Molotof</h2>
-            <p class="member-desc">الكو اونر الثاني، ركيزة أساسية من ركائز النجاح؛ كلمات الشكر تعجز عن وصف عظيم عطائك.</p>
-        </div>
+            <div class="community-card">
+                <div class="card-header">
+                    <img src="https://i.pravatar.cc/150?img=5" alt="Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <h4>Sara Art <i class="fas fa-check-circle verified-badge" title="عضو موثق"></i></h4>
+                        <span class="contribution-type">تصميم وجرافيك 🎨</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>صممت البنرات الخاصة بقسم الفعاليات والألعاب، وعملت إيموجيز مخصصة للسيرفر.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="upvote-btn" onclick="toggleUpvote(this)">
+                        <i class="fas fa-heart"></i> <span class="count">34</span>
+                    </button>
+                </div>
+            </div>
 
-        <div class="card">
-            <div class="role-badge">Developer & Tech Lead 💻</div>
-            <h2 class="member-name">#EuroMoscow.</h2>
-            <p class="member-desc">مطور السيرفر وصانع الموقع، العقل المدبر وراء الكواليس الذي يحول الخيال إلى واقع رقمي مبهر.</p>
-        </div>
-
-        <div class="card">
-            <div class="role-badge">Distinguished Admin ⭐</div>
-            <h2 class="member-name">omar scorpion</h2>
-            <p class="member-desc">إداري مميز قدم الغالي والنفيس، مثال يُحتذى به في التفاني والعطاء دون مقابل.</p>
-        </div>
-
-        <div class="card">
-            <div class="role-badge">Girls Supervisor 🌸</div>
-            <h2 class="member-name">Maryem</h2>
-            <p class="member-desc">مسؤولة القسم النسائي، شكراً لجهودك الرائعة في تنظيم السيرفر وحفظ خصوصية الجميع.</p>
-        </div>
-
-        <div class="card">
-            <div class="role-badge">Core Member ✨</div>
-            <h2 class="member-name">Samo</h2>
-            <p class="member-desc">من أبرز الوجوه التي تضع بصمتها في السيرفر، حضورك ومساعدتك الدائمة محل تقدير وفخر.</p>
         </div>
     </div>
 
-    <footer class="special-thanks">
-        <h3>ولكل من لم يُذكر اسمه في القائمة... 💜</h3>
-        <p>
-            تلك كانت أبرز الأسماء، ولكن الشكر يمتد ليشمل كل من وضع لبنة في هذا البناء، حتى ولو بكلمة طيبة، فكرة بسيطة، أو ابتسامة رقمية. القائمة تطول، والتقدير لكل فرد في عائلة <strong>Victoria™</strong> لا ينتهي. أنتم المحرك الحقيقي، وبكم نستمر.
-        </p>
-    </footer>
-
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // تكوين مكتبة Particles.js لخلفية الجزيئات التفاعلية
+        // إعدادات الخلفية
         particlesJS('particles-js', {
             "particles": {
-                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "number": { "value": 50 },
                 "color": { "value": "#7209b7" },
                 "shape": { "type": "circle" },
-                "opacity": { "value": 0.5, "random": true },
-                "size": { "value": 3, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#7209b7", "opacity": 0.2, "width": 1 },
-                "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
-                "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.5 } }, "push": { "particles_nb": 4 } }
-            },
-            "retina_detect": true
+                "opacity": { "value": 0.3 },
+                "size": { "value": 3 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#7209b7", "opacity": 0.2 },
+                "move": { "enable": true, "speed": 1 }
+            }
         });
 
-        // تأثيرات الكروت المتقدمة (Tilt & Shimmer)
-        const cards = document.querySelectorAll('.card');
-        
-        cards.forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                // تحديث موقع الإضاءة الداخلية تتبع الماوس
-                card.style.setProperty('--shimmer-x', `${x}px`);
-                card.style.setProperty('--shimmer-y', `${y}px`);
-                
-                // تأثير الميلان ثلاثي الأبعاد (Tilt Effect)
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const tiltX = (centerY - y) / 15; // حساسية الميلان الرأسي
-                const tiltY = (x - centerX) / 15; // حساسية الميلان الأفقي
-                
-                card.style.setProperty('--tilt-x', `${tiltX}deg`);
-                card.style.setProperty('--tilt-y', `${tiltY}deg`);
-            });
+        // محاكاة تسجيل الدخول بديسكورد (للعرض فقط حالياً)
+        function simulateLogin() {
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الاتصال...';
             
-            // إعادة تعيين التأثيرات عند خروج الماوس
-            card.addEventListener('mouseleave', () => {
-                card.style.setProperty('--tilt-x', `0deg`);
-                card.style.setProperty('--tilt-y', `0deg`);
-                card.style.setProperty('--shimmer-x', `50%`);
-                card.style.setProperty('--shimmer-y', `50%`);
-            });
-        });
+            setTimeout(() => {
+                btn.style.backgroundColor = 'var(--success-color)';
+                btn.innerHTML = '<i class="fas fa-check"></i> تم تسجيل الدخول كـ (Hassan)';
+                
+                // تفعيل حقول الإدخال
+                document.getElementById('formInputs').classList.add('active');
+                document.getElementById('formText').classList.add('active');
+                document.getElementById('formSubmit').classList.add('active');
+            }, 1500);
+        }
 
-        // تأثير ظهور الكروت عند السكرول (Intersection Observer)
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    // تأخير خفيف متدرج لكل كرت
-                    setTimeout(() => {
-                        entry.target.classList.add('show-card');
-                    }, index * 100); 
-                    observer.unobserve(entry.target); // إظهار الكرت مرة واحدة فقط
-                }
-            });
-        }, { threshold: 0.2 }); // الكرت يظهر عند ظهور 20% منه في الشاشة
+        // إظهار مؤشر الكتابة الوهمي للذكاء الاصطناعي
+        let typingTimer;
+        function showTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'block';
+            
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 1000);
+        }
 
-        cards.forEach(card => {
-            observer.observe(card);
-        });
+        // تفاعل زر الإعجاب (Upvote)
+        function toggleUpvote(btn) {
+            btn.classList.toggle('active');
+            const countSpan = btn.querySelector('.count');
+            let currentCount = parseInt(countSpan.innerText);
+            
+            if(btn.classList.contains('active')) {
+                countSpan.innerText = currentCount + 1;
+                btn.querySelector('i').style.color = 'var(--purple-neon)';
+            } else {
+                countSpan.innerText = currentCount - 1;
+                btn.querySelector('i').style.color = 'var(--text-muted)';
+            }
+        }
+
+        // محاكاة إضافة كرت جديد للمجتمع
+        function addContribution() {
+            const text = document.getElementById('contribText').value;
+            const type = document.getElementById('contribType').value;
+            
+            if(text.trim() === '') {
+                alert('الرجاء كتابة مساهمتك أولاً!');
+                return;
+            }
+
+            const grid = document.getElementById('communityGrid');
+            const newCard = document.createElement('div');
+            newCard.className = 'community-card';
+            newCard.style.opacity = '0';
+            newCard.style.transform = 'translateY(20px)';
+            
+            newCard.innerHTML = `
+                <div class="card-header">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <h4>Hassan (أنت)</h4>
+                        <span class="contribution-type">${type}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>${text}</p>
+                </div>
+                <div class="card-footer">
+                    <button class="upvote-btn" onclick="toggleUpvote(this)">
+                        <i class="fas fa-heart"></i> <span class="count">0</span>
+                    </button>
+                </div>
+            `;
+            
+            // إضافة الكرت في بداية الشبكة
+            grid.insertBefore(newCard, grid.firstChild);
+            
+            // تأثير الظهور
+            setTimeout(() => {
+                newCard.style.opacity = '1';
+                newCard.style.transform = 'translateY(0)';
+            }, 100);
+
+            // تفريغ الحقل
+            document.getElementById('contribText').value = '';
+        }
     </script>
 </body>
 </html>
